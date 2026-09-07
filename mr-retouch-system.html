@@ -224,7 +224,19 @@
 </style>
 </head>
 <body>
-<div class="wrap">
+
+<div id="loginScreen" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;">
+  <div style="max-width:360px;width:100%;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:28px;">
+    <div class="brand" style="text-align:center;margin-bottom:4px;"><b>Mr.</b> Retouch</div>
+    <p style="text-align:center;color:var(--text-dim);font-size:13px;margin:0 0 22px;">سجّل دخولك للمتابعة</p>
+    <input type="email" id="loginEmail" placeholder="الإيميل" style="margin-bottom:12px;">
+    <input type="password" id="loginPassword" placeholder="الباسورد" style="margin-bottom:16px;">
+    <button class="btn-add" style="width:100%;" onclick="doLogin()">دخول</button>
+    <p id="loginError" style="color:var(--red);font-size:12.5px;text-align:center;margin-top:12px;min-height:14px;"></p>
+  </div>
+</div>
+
+<div class="wrap" id="appWrap" style="display:none;">
 
   <header>
     <div>
@@ -237,6 +249,7 @@
       <div style="display:flex;gap:8px;">
         <span class="icon-btn" onclick="exportBackup()">تنزيل نسخة احتياطية</span>
         <span class="icon-btn" onclick="document.getElementById('importFile').click()">استرجاع نسخة</span>
+        <span class="icon-btn" onclick="doLogout()">تسجيل خروج</span>
         <input type="file" id="importFile" accept="application/json" style="display:none">
       </div>
     </div>
@@ -332,6 +345,7 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
 import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAXriIKaHXTNHVv2zoma4vUxad_IMPMXlE",
@@ -343,6 +357,7 @@ const firebaseConfig = {
 };
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
+const auth = getAuth(firebaseApp);
 const dataDocRef = doc(db, 'mrretouch', 'main');
 
 const DAY = 24*60*60*1000;
@@ -377,8 +392,11 @@ function showStatus(msg, isError){
   }
 }
 
+let listenerStarted = false;
 function loadAll(){
   document.getElementById('txnDate').valueAsDate = new Date();
+  if(listenerStarted) return;
+  listenerStarted = true;
 
   onSnapshot(dataDocRef, (snap)=>{
     if(snap.exists()){
@@ -873,12 +891,39 @@ if('serviceWorker' in navigator){
   });
 }
 
-Object.assign(window, {
-  addOrder, editOrder, cancelEditOrder, removeOrder, markDelivered, toggleArchive,
-  togglePaid, addTxn, removeTxn, toggleClient, toggleTask, exportBackup
+function doLogin(){
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const errEl = document.getElementById('loginError');
+  errEl.textContent = '';
+  if(!email || !password){
+    errEl.textContent = 'اكتب الإيميل والباسورد';
+    return;
+  }
+  signInWithEmailAndPassword(auth, email, password).catch((err)=>{
+    errEl.textContent = 'الإيميل أو الباسورد غلط';
+  });
+}
+
+function doLogout(){
+  signOut(auth);
+}
+
+onAuthStateChanged(auth, (user)=>{
+  if(user){
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('appWrap').style.display = 'block';
+    loadAll();
+  } else {
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('appWrap').style.display = 'none';
+  }
 });
 
-loadAll();
+Object.assign(window, {
+  addOrder, editOrder, cancelEditOrder, removeOrder, markDelivered, toggleArchive,
+  togglePaid, addTxn, removeTxn, toggleClient, toggleTask, exportBackup, doLogin, doLogout
+});
 </script>
 </body>
 </html>
