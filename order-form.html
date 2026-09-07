@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>طلب أوردر — Mr. Retouch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14171c; --panel:#1c2027; --panel-2:#242932; --line:#323844;
+    --text:#e9e6df; --text-dim:#9aa0ab;
+    --gold:#c89b3c; --gold-soft:#c89b3c22;
+    --green:#6fa787; --green-soft:#6fa78722;
+    --amber:#d9a441; --amber-soft:#d9a44122;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--ink);color:var(--text);font-family:'Tajawal',sans-serif;
+    min-height:100vh;padding:28px 16px 60px;display:flex;justify-content:center;}
+  .wrap{max-width:520px;width:100%;}
+  .brand{font-family:'Amiri',serif;font-style:italic;font-size:28px;text-align:center;margin-bottom:4px;}
+  .brand b{color:var(--gold);font-style:normal;}
+  .sub{text-align:center;color:var(--text-dim);font-size:13.5px;margin:0 0 26px;}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:16px;}
+  label{display:block;font-size:13px;color:var(--text-dim);margin-bottom:6px;}
+  input,textarea{
+    width:100%;background:var(--panel-2);border:1px solid var(--line);color:var(--text);
+    border-radius:8px;padding:11px 12px;font-family:inherit;font-size:14px;margin-bottom:16px;
+  }
+  textarea{min-height:70px;resize:vertical;}
+  .pay-box{
+    background:var(--gold-soft);border:1px solid var(--gold);border-radius:10px;padding:16px;margin-bottom:16px;
+  }
+  .pay-box h3{margin:0 0 10px;font-size:14px;color:var(--gold);}
+  .pay-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:14px;}
+  .pay-row b{font-size:16px;letter-spacing:0.5px;}
+  .amount-display{
+    text-align:center;font-size:26px;font-weight:800;color:var(--gold);margin:10px 0 4px;
+  }
+  .amount-label{text-align:center;color:var(--text-dim);font-size:12px;margin-bottom:14px;}
+  button{
+    width:100%;background:var(--gold);color:#20180a;border:none;border-radius:10px;
+    padding:14px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;
+  }
+  button:disabled{opacity:0.5;cursor:not-allowed;}
+  .note{font-size:12px;color:var(--text-dim);text-align:center;margin-top:10px;line-height:1.7;}
+  .error{color:#c1595a;font-size:12.5px;margin-top:-10px;margin-bottom:14px;display:none;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand"><b>Mr.</b> Retouch</div>
+  <p class="sub">فورم طلب أوردر جديد</p>
+
+  <div class="card">
+    <label>الاسم</label>
+    <input type="text" id="cName" placeholder="اسمك">
+
+    <label>تفاصيل الأوردر / الباكدج</label>
+    <textarea id="cDetails" placeholder="مثلاً: تعديل فرح، لايت روم إيفينت، 350 صورة تقريبًا"></textarea>
+
+    <label>الموعد المطلوب للتسليم</label>
+    <input type="date" id="cDeadline">
+
+    <label>المبلغ المتفق عليه (جنيه)</label>
+    <input type="text" id="cAmount" placeholder="مثلاً 2000" inputmode="numeric">
+    <div class="error" id="formError">لازم تملى كل الخانات الأساسية.</div>
+  </div>
+
+  <div class="pay-box">
+    <h3>تعليمات الدفع</h3>
+    <div class="pay-row"><span>فودافون كاش</span><b>01002045017</b></div>
+    <div class="pay-row"><span>إنستاباي</span><b>01002045017</b></div>
+    <div class="amount-display" id="amountShow">—</div>
+    <div class="amount-label">المبلغ المطلوب تحويله قبل بدء الشغل</div>
+  </div>
+
+  <button onclick="submitOrder()">حوّلت المبلغ ✅ — إرسال الطلب</button>
+  <p class="note">هيتفتحلك واتساب برسالة جاهزة فيها كل التفاصيل، ابعتها للتأكيد. الأوردر بيتقبل ويبدأ الشغل بعد ما نتأكد من استلام التحويل.</p>
+</div>
+
+<script>
+const WHATSAPP_NUMBER = '201002045017'; // 01002045017 بصيغة دولية
+
+document.getElementById('cAmount').addEventListener('input', function(){
+  const val = this.value.replace(/[^0-9.]/g,'');
+  document.getElementById('amountShow').textContent = val ? val + ' ج.م' : '—';
+});
+
+function submitOrder(){
+  const name = document.getElementById('cName').value.trim();
+  const details = document.getElementById('cDetails').value.trim();
+  const deadline = document.getElementById('cDeadline').value;
+  const amount = document.getElementById('cAmount').value.trim();
+  const err = document.getElementById('formError');
+
+  if(!name || !details || !amount){
+    err.style.display = 'block';
+    return;
+  }
+  err.style.display = 'none';
+
+  const deadlineTxt = deadline ? new Date(deadline).toLocaleDateString('ar-EG',{day:'numeric',month:'long',year:'numeric'}) : 'مش محدد';
+
+  const msg = `طلب أوردر جديد ✅
+الاسم: ${name}
+تفاصيل الأوردر: ${details}
+الموعد المطلوب: ${deadlineTxt}
+المبلغ المتفق عليه: ${amount} ج.م
+✅ تم تحويل المبلغ (فودافون كاش/إنستاباي - 01002045017)`;
+
+  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+  window.location.href = url;
+}
+</script>
+</body>
+</html>

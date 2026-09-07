@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>نظام متابعة Mr. Retouch</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Mr. Retouch">
+<meta name="theme-color" content="#14171c">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14171c;
+    --panel:#1c2027;
+    --panel-2:#242932;
+    --line:#323844;
+    --text:#e9e6df;
+    --text-dim:#9aa0ab;
+    --gold:#c89b3c;
+    --gold-soft:#c89b3c22;
+    --rose:#b5657a;
+    --rose-soft:#b5657a22;
+    --green:#6fa787;
+    --green-soft:#6fa78722;
+    --amber:#d9a441;
+    --amber-soft:#d9a44122;
+    --red:#c1595a;
+    --red-soft:#c1595a22;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--text);
+    font-family:'Tajawal',sans-serif;
+    min-height:100vh;
+    padding:28px 18px 60px;
+  }
+  .wrap{max-width:1080px;margin:0 auto;}
+  header{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:16px;
+    flex-wrap:wrap;
+    border-bottom:1px solid var(--line);
+    padding-bottom:18px;
+    margin-bottom:28px;
+  }
+  .brand{
+    font-family:'Amiri',serif;
+    font-style:italic;
+    font-size:30px;
+    color:var(--text);
+    letter-spacing:0.5px;
+  }
+  .brand b{color:var(--gold);font-style:normal;}
+  header p{margin:4px 0 0;color:var(--text-dim);font-size:14px;}
+  .stats{display:flex;gap:10px;flex-wrap:wrap;}
+  .stat{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:8px 14px;
+    text-align:center;
+    min-width:84px;
+  }
+  .stat b{display:block;font-size:20px;}
+  .stat span{font-size:11px;color:var(--text-dim);}
+  .stat.red b{color:var(--red);}
+  .stat.amber b{color:var(--amber);}
+  .stat.green b{color:var(--green);}
+
+  .grid{display:grid;grid-template-columns:1.3fr 1fr;gap:22px;align-items:start;}
+  @media(max-width:820px){.grid{grid-template-columns:1fr;}}
+
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:20px;
+  }
+  .card h2{
+    font-family:'Amiri',serif;
+    font-size:21px;
+    margin:0 0 4px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .dot{width:8px;height:8px;border-radius:50%;display:inline-block;}
+  .card > p.sub{margin:0 0 16px;color:var(--text-dim);font-size:13px;}
+
+  .form-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+  input[type=text],input[type=date],select{
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    color:var(--text);
+    border-radius:8px;
+    padding:9px 12px;
+    font-family:inherit;
+    font-size:13.5px;
+    flex:1;
+    min-width:120px;
+  }
+  input::placeholder{color:var(--text-dim);}
+  button{
+    font-family:inherit;
+    cursor:pointer;
+    border:none;
+    border-radius:8px;
+    padding:9px 18px;
+    font-size:13.5px;
+    font-weight:700;
+  }
+  .btn-add{background:var(--gold);color:#20180a;}
+  .btn-add:hover{filter:brightness(1.08);}
+
+  .order{
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:12px 14px;
+    margin-bottom:10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .order.red{border-color:var(--red);background:var(--red-soft);}
+  .order.amber{border-color:var(--amber);background:var(--amber-soft);}
+  .order.green{border-color:var(--green);background:var(--green-soft);}
+  .order .name{font-weight:700;font-size:14.5px;}
+  .order .meta{font-size:12px;color:var(--text-dim);margin-top:2px;}
+  .badge{
+    font-size:12px;
+    font-weight:700;
+    padding:4px 10px;
+    border-radius:20px;
+    white-space:nowrap;
+  }
+  .badge.red{background:var(--red);color:#2a0f10;}
+  .badge.amber{background:var(--amber);color:#241a05;}
+  .badge.green{background:var(--green);color:#0e2019;}
+  .order-actions{display:flex;gap:6px;}
+  .icon-btn{
+    background:var(--panel-2);
+    color:var(--text-dim);
+    border-radius:7px;
+    padding:6px 10px;
+    font-size:12px;
+  }
+  .icon-btn:hover{color:var(--text);}
+  .empty{color:var(--text-dim);font-size:13px;text-align:center;padding:20px 0;}
+
+  .task{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    padding:10px 4px;
+    border-bottom:1px solid var(--line);
+    cursor:pointer;
+  }
+  .task:last-child{border-bottom:none;}
+  .task input{margin-top:3px;accent-color:var(--rose);width:16px;height:16px;flex-shrink:0;}
+  .task .t-title{font-size:13.5px;font-weight:500;}
+  .task .t-title.done{text-decoration:line-through;color:var(--text-dim);}
+  .task .t-time{font-size:11px;color:var(--rose);}
+
+  .progress-wrap{
+    background:var(--panel-2);
+    border-radius:20px;
+    height:9px;
+    overflow:hidden;
+    margin:14px 0 6px;
+  }
+  .progress-bar{height:100%;background:var(--rose);border-radius:20px;transition:width .3s;}
+  .progress-label{font-size:12px;color:var(--text-dim);display:flex;justify-content:space-between;}
+
+  .reset-note{font-size:11.5px;color:var(--text-dim);margin-top:14px;text-align:center;}
+
+  .full-card{margin-top:22px;}
+  .money-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:16px;}
+  @media(max-width:700px){.money-grid{grid-template-columns:1fr;}}
+  .money-sub h3{font-size:14px;margin:0 0 10px;color:var(--text-dim);font-weight:700;}
+  .txn{
+    display:flex;justify-content:space-between;align-items:center;
+    border-bottom:1px solid var(--line);padding:9px 2px;gap:8px;
+  }
+  .txn:last-child{border-bottom:none;}
+  .txn .t-desc{font-size:13px;font-weight:500;}
+  .txn .t-date{font-size:11px;color:var(--text-dim);}
+  .txn .t-amount{font-weight:700;font-size:13.5px;white-space:nowrap;}
+  .txn .t-amount.in{color:var(--green);}
+  .txn .t-amount.out{color:var(--red);}
+  .client-card{
+    border:1px solid var(--line);border-radius:10px;margin-bottom:10px;overflow:hidden;
+  }
+  .client-head{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:12px 14px;cursor:pointer;gap:10px;flex-wrap:wrap;
+  }
+  .client-head .name{font-weight:700;font-size:14.5px;}
+  .client-head .nums{display:flex;gap:14px;font-size:12px;color:var(--text-dim);}
+  .client-head .nums b{color:var(--text);}
+  .client-body{
+    display:none;border-top:1px solid var(--line);padding:10px 14px;background:var(--panel-2);
+  }
+  .client-body.open{display:block;}
+  .client-order-row{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:7px 0;border-bottom:1px solid var(--line);font-size:12.5px;gap:8px;
+  }
+  .client-order-row:last-child{border-bottom:none;}
+  .client-order-row .meta{color:var(--text-dim);font-size:11.5px;}
+  .pay-badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;cursor:pointer;white-space:nowrap;}
+  .pay-badge.paid{background:var(--green-soft);color:var(--green);}
+  .pay-badge.unpaid{background:var(--amber-soft);color:var(--amber);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div>
+      <div class="brand"><b>Mr.</b> Retouch</div>
+      <p>نظام متابعة التسليمات والتسويق الأسبوعي</p>
+      <p id="saveStatus" style="min-height:14px;font-size:11.5px;"></p>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;">
+      <div class="stats" id="statsBar"></div>
+      <div style="display:flex;gap:8px;">
+        <span class="icon-btn" onclick="exportBackup()">تنزيل نسخة احتياطية</span>
+        <span class="icon-btn" onclick="document.getElementById('importFile').click()">استرجاع نسخة</span>
+        <input type="file" id="importFile" accept="application/json" style="display:none">
+      </div>
+    </div>
+  </header>
+
+  <div class="grid">
+
+    <!-- DELIVERIES -->
+    <div class="card">
+      <h2><span class="dot" style="background:var(--gold)"></span>التسليمات</h2>
+      <p class="sub">أضف كل أوردر بموعد تسليمه، والنظام هيلوّنه حسب الوقت المتبقي.</p>
+
+      <div class="form-row">
+        <input type="text" id="clientName" placeholder="اسم العميل / المصور">
+        <input type="date" id="deadlineDate">
+      </div>
+      <div class="form-row">
+        <input type="text" id="orderNote" placeholder="ملاحظة (عدد الصور، الباكدج...) — اختياري">
+        <input type="text" id="orderPrice" placeholder="السعر (اختياري)" style="max-width:140px;">
+      </div>
+      <div class="form-row">
+        <button class="btn-add" id="addOrderBtn" onclick="addOrder()">إضافة</button>
+        <span class="icon-btn" id="cancelEditBtn" style="display:none;" onclick="cancelEditOrder()">إلغاء التعديل</span>
+      </div>
+
+      <div id="pendingPaymentWrap"></div>
+
+      <div id="ordersList"></div>
+
+      <div style="margin-top:18px;border-top:1px solid var(--line);padding-top:12px;">
+        <div class="client-head" onclick="toggleArchive()" style="padding:2px 0;">
+          <span class="name" style="font-size:13px;color:var(--text-dim);">الأرشيف (طلبات اتسلمت)</span>
+        </div>
+        <div class="client-body" id="archiveBody"></div>
+      </div>
+    </div>
+
+    <!-- MARKETING -->
+    <div class="card">
+      <h2><span class="dot" style="background:var(--rose)"></span>تسويق الأسبوع</h2>
+      <p class="sub">مهام صغيرة (10-20 دقيقة) بتتجدد كل أسبوع، عشان التسويق ميضيعش وسط الشغل.</p>
+
+      <div class="progress-wrap"><div class="progress-bar" id="progBar" style="width:0%"></div></div>
+      <div class="progress-label"><span id="progText">0 من 0</span><span id="weekLabel"></span></div>
+
+      <div id="tasksList" style="margin-top:14px;"></div>
+      <p class="reset-note">المهام بترجع فاضية تلقائيًا كل أسبوع جديد.</p>
+    </div>
+
+  </div>
+
+  <!-- FINANCES -->
+  <div class="card full-card">
+    <h2><span class="dot" style="background:var(--green)"></span>الحسابات</h2>
+    <p class="sub">دفعات الأوردرات وأي دخل أو مصروف تاني، مجمّعين مع بعض تحت حساب كل عميل.</p>
+
+    <div class="stats" id="moneyStatsBar" style="margin-top:4px;"></div>
+
+    <div class="money-sub" style="margin-top:18px;">
+      <h3>حساب كل عميل</h3>
+      <div id="clientsList"></div>
+    </div>
+
+    <div class="money-grid" style="margin-top:20px;">
+      <div class="money-sub">
+        <h3>دفعات الأوردرات</h3>
+        <div id="orderPaymentsList"></div>
+      </div>
+
+      <div class="money-sub">
+        <h3>معاملات يومية (دخل / مصروف)</h3>
+        <div class="form-row">
+          <input type="date" id="txnDate">
+          <select id="txnType">
+            <option value="in">دخل</option>
+            <option value="out">مصروف</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <input type="text" id="txnDesc" placeholder="الوصف (مثلاً: عربون، خامات، اشتراك...)">
+          <input type="text" id="txnAmount" placeholder="المبلغ" style="max-width:110px;">
+        </div>
+        <div class="form-row">
+          <input type="text" id="txnClient" placeholder="اسم العميل (اختياري - سيبه فاضي لو مصروف عام)">
+          <button class="btn-add" onclick="addTxn()">إضافة</button>
+        </div>
+        <div id="txnsList"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const DAY = 24*60*60*1000;
+
+const TASK_POOL = [
+  {id:'t1', title:'نشر بوست قبل/بعد لأحدث شغل', time:'15 د'},
+  {id:'t2', title:'ستوري بيوريك خلف الكواليس', time:'5 د'},
+  {id:'t3', title:'الرد على كل الرسايل والاستفسارات المعلّقة', time:'15 د'},
+  {id:'t4', title:'تعليق قيمة تحت بوست 5 مصورين محتملين', time:'15 د'},
+  {id:'t5', title:'تحديث الهايلايت أو الصور المميزة', time:'10 د'},
+  {id:'t6', title:'إرسال متابعة لعميل قديم لسؤاله عن الحجز الجاي', time:'10 د'},
+];
+
+function getWeekKey(){
+  const now = new Date();
+  const jan1 = new Date(now.getFullYear(),0,1);
+  const week = Math.ceil((((now - jan1)/DAY) + jan1.getDay()+1)/7);
+  return `${now.getFullYear()}-W${week}`;
+}
+
+let orders = [];
+let marketingState = {week:'', done:{}};
+let transactions = [];
+let editingOrderId = null;
+
+function showStatus(msg, isError){
+  const el = document.getElementById('saveStatus');
+  el.textContent = msg;
+  el.style.color = isError ? 'var(--red)' : 'var(--green)';
+  if(!isError){
+    setTimeout(()=>{ if(el.textContent===msg) el.textContent=''; }, 2000);
+  }
+}
+
+function loadAll(){
+  try{
+    const o = localStorage.getItem('mrretouch-orders');
+    orders = o ? JSON.parse(o) : [];
+  }catch(e){ orders = []; }
+
+  try{
+    const m = localStorage.getItem('mrretouch-marketing');
+    marketingState = m ? JSON.parse(m) : {week:'', done:{}};
+  }catch(e){ marketingState = {week:'', done:{}}; }
+
+  try{
+    const t = localStorage.getItem('mrretouch-transactions');
+    transactions = t ? JSON.parse(t) : [];
+  }catch(e){ transactions = []; }
+
+  const wk = getWeekKey();
+  if(marketingState.week !== wk){
+    marketingState = {week: wk, done:{}};
+    saveMarketing();
+  }
+
+  document.getElementById('txnDate').valueAsDate = new Date();
+
+  renderOrders();
+  renderTasks();
+  renderMoney();
+  renderClients();
+}
+
+function saveOrders(){
+  try{
+    localStorage.setItem('mrretouch-orders', JSON.stringify(orders));
+    return true;
+  }catch(e){
+    showStatus('حصل خطأ في الحفظ - جرب تاني', true);
+    return false;
+  }
+}
+function saveMarketing(){
+  try{
+    localStorage.setItem('mrretouch-marketing', JSON.stringify(marketingState));
+    return true;
+  }catch(e){ return false; }
+}
+function saveTxns(){
+  try{
+    localStorage.setItem('mrretouch-transactions', JSON.stringify(transactions));
+    return true;
+  }catch(e){
+    showStatus('حصل خطأ في الحفظ - جرب تاني', true);
+    return false;
+  }
+}
+
+function addOrder(){
+  const name = document.getElementById('clientName').value.trim();
+  const deadline = document.getElementById('deadlineDate').value;
+  const note = document.getElementById('orderNote').value.trim();
+  const priceRaw = document.getElementById('orderPrice').value.trim();
+  const price = priceRaw ? parseFloat(priceRaw) : 0;
+  if(!name || !deadline){
+    showStatus('لازم تكتب الاسم والموعد', true);
+    return;
+  }
+
+  if(editingOrderId){
+    const o = orders.find(x=>x.id===editingOrderId);
+    if(o){
+      o.name = name; o.deadline = deadline; o.note = note; o.price = isNaN(price)?0:price;
+    }
+    editingOrderId = null;
+    document.getElementById('addOrderBtn').textContent = 'إضافة';
+    document.getElementById('cancelEditBtn').style.display = 'none';
+  } else {
+    orders.push({id: Date.now().toString(), name, deadline, note, price: isNaN(price)?0:price, paid:false, delivered:false});
+  }
+
+  const ok = saveOrders();
+  renderOrders();
+  renderMoney();
+  renderClients();
+  if(ok){
+    document.getElementById('clientName').value='';
+    document.getElementById('deadlineDate').value='';
+    document.getElementById('orderNote').value='';
+    document.getElementById('orderPrice').value='';
+    showStatus('اتحفظ ✓', false);
+  }
+}
+
+function editOrder(id){
+  const o = orders.find(x=>x.id===id);
+  if(!o) return;
+  document.getElementById('clientName').value = o.name;
+  document.getElementById('deadlineDate').value = o.deadline;
+  document.getElementById('orderNote').value = o.note || '';
+  document.getElementById('orderPrice').value = o.price || '';
+  editingOrderId = id;
+  document.getElementById('addOrderBtn').textContent = 'حفظ التعديل';
+  document.getElementById('cancelEditBtn').style.display = 'inline-block';
+  document.getElementById('clientName').scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+function cancelEditOrder(){
+  editingOrderId = null;
+  document.getElementById('addOrderBtn').textContent = 'إضافة';
+  document.getElementById('cancelEditBtn').style.display = 'none';
+  document.getElementById('clientName').value='';
+  document.getElementById('deadlineDate').value='';
+  document.getElementById('orderNote').value='';
+  document.getElementById('orderPrice').value='';
+}
+
+function markDelivered(id){
+  const o = orders.find(x=>x.id===id);
+  if(!o) return;
+  o.delivered = true;
+  saveOrders();
+  renderOrders();
+  renderMoney();
+  renderClients();
+}
+
+let archiveOpen = false;
+function toggleArchive(){
+  archiveOpen = !archiveOpen;
+  document.getElementById('archiveBody').classList.toggle('open', archiveOpen);
+}
+
+function renderArchive(){
+  const body = document.getElementById('archiveBody');
+  const delivered = orders.filter(o=>o.delivered).sort((a,b)=> new Date(b.deadline)-new Date(a.deadline));
+  if(delivered.length===0){
+    body.innerHTML = '<div class="empty">مفيش طلبات في الأرشيف لسه.</div>';
+    return;
+  }
+  body.innerHTML = delivered.map(o=>{
+    const dateFmt = new Date(o.deadline).toLocaleDateString('ar-EG',{day:'numeric',month:'short'});
+    return `<div class="client-order-row">
+      <div>
+        <div>${escapeHtml(o.name)}${o.note ? ' · '+escapeHtml(o.note) : ''}</div>
+        <div class="meta">تسليم ${dateFmt}${o.price ? ' · '+o.price+' ج.م' : ''}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span class="pay-badge ${o.paid?'paid':'unpaid'}" onclick="togglePaid('${o.id}')">${o.paid?'اتدفع':'لسه'}</span>
+        <span class="icon-btn" onclick="if(confirm('تحذف الطلب ده نهائي من الأرشيف؟')) removeOrder('${o.id}')">حذف</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function removeOrder(id){
+  orders = orders.filter(o=>o.id!==id);
+  saveOrders();
+  renderOrders();
+  renderMoney();
+  renderClients();
+}
+
+function togglePaid(id){
+  const o = orders.find(x=>x.id===id);
+  if(!o) return;
+  o.paid = !o.paid;
+  saveOrders();
+  renderOrders();
+  renderMoney();
+  renderClients();
+}
+
+function addTxn(){
+  const date = document.getElementById('txnDate').value;
+  const type = document.getElementById('txnType').value;
+  const desc = document.getElementById('txnDesc').value.trim();
+  const amountRaw = document.getElementById('txnAmount').value.trim();
+  const amount = parseFloat(amountRaw);
+  const client = document.getElementById('txnClient').value.trim();
+  if(!date || !desc || !amountRaw || isNaN(amount)){
+    showStatus('لازم تكتب الوصف والمبلغ', true);
+    return;
+  }
+  transactions.push({id: Date.now().toString(), date, type, desc, amount, client});
+  const ok = saveTxns();
+  renderMoney();
+  renderClients();
+  if(ok){
+    document.getElementById('txnDesc').value='';
+    document.getElementById('txnAmount').value='';
+    document.getElementById('txnClient').value='';
+    showStatus('اتحفظ ✓', false);
+  }
+}
+
+function removeTxn(id){
+  transactions = transactions.filter(t=>t.id!==id);
+  saveTxns();
+  renderMoney();
+  renderClients();
+}
+
+function statusFor(deadline){
+  const today = new Date(); today.setHours(0,0,0,0);
+  const d = new Date(deadline);
+  const diffDays = Math.round((d - today)/DAY);
+  if(diffDays < 0) return {cls:'red', label:`متأخر ${Math.abs(diffDays)} يوم`};
+  if(diffDays === 0) return {cls:'red', label:'التسليم النهارده'};
+  if(diffDays <= 2) return {cls:'amber', label:`باقي ${diffDays} يوم`};
+  return {cls:'green', label:`باقي ${diffDays} يوم`};
+}
+
+function renderOrders(){
+  const list = document.getElementById('ordersList');
+  const pendingWrap = document.getElementById('pendingPaymentWrap');
+  const active = orders.filter(o=>!o.delivered);
+  const pending = active.filter(o=>!o.paid);
+  const confirmed = active.filter(o=>o.paid);
+  const sorted = [...confirmed].sort((a,b)=> new Date(a.deadline) - new Date(b.deadline));
+
+  if(pending.length===0){
+    pendingWrap.innerHTML = '';
+  } else {
+    const pendingSorted = [...pending].sort((a,b)=> new Date(a.deadline) - new Date(b.deadline));
+    pendingWrap.innerHTML = `
+      <div style="border:1px solid var(--amber);background:var(--amber-soft);border-radius:10px;padding:12px 14px;margin-bottom:14px;">
+        <div style="font-weight:700;font-size:13px;color:var(--amber);margin-bottom:8px;">⏳ بانتظار تأكيد الدفع (${pending.length}) — لسه ما بدأناش فيها</div>
+        ${pendingSorted.map(o=>{
+          const dateFmt = new Date(o.deadline).toLocaleDateString('ar-EG',{day:'numeric',month:'short'});
+          return `<div class="client-order-row">
+            <div>
+              <div>${escapeHtml(o.name)}${o.note ? ' · '+escapeHtml(o.note) : ''}</div>
+              <div class="meta">مطلوب تسليمه ${dateFmt}${o.price ? ' · '+o.price+' ج.م' : ''}</div>
+            </div>
+            <div style="display:flex;gap:6px;">
+              <span class="icon-btn" onclick="editOrder('${o.id}')">تعديل</span>
+              <span class="pay-badge unpaid" onclick="togglePaid('${o.id}')" style="background:var(--green-soft);color:var(--green);">تأكيد استلام الدفع ✅</span>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    `;
+  }
+
+  if(sorted.length===0){
+    list.innerHTML = '<div class="empty">مفيش أوردرات مؤكدة الدفع لسه.</div>';
+  } else {
+    list.innerHTML = sorted.map(o=>{
+      const s = statusFor(o.deadline);
+      const dateFmt = new Date(o.deadline).toLocaleDateString('ar-EG',{day:'numeric',month:'short'});
+      const priceTxt = o.price ? ` · ${o.price} ج.م` : '';
+      return `<div class="order ${s.cls}">
+        <div>
+          <div class="name">${escapeHtml(o.name)}</div>
+          <div class="meta">تسليم ${dateFmt}${o.note ? ' · '+escapeHtml(o.note) : ''}${priceTxt}</div>
+        </div>
+        <div class="order-actions">
+          <span class="badge ${s.cls}">${s.label}</span>
+          <span class="icon-btn" onclick="editOrder('${o.id}')">تعديل</span>
+          <span class="icon-btn" onclick="markDelivered('${o.id}')">تم التسليم ✓</span>
+        </div>
+      </div>`;
+    }).join('');
+  }
+  renderStats(sorted);
+  renderArchive();
+}
+
+function renderStats(sorted){
+  const bar = document.getElementById('statsBar');
+  let red=0, amber=0, green=0;
+  sorted.forEach(o=>{
+    const s = statusFor(o.deadline);
+    if(s.cls==='red') red++; else if(s.cls==='amber') amber++; else green++;
+  });
+  bar.innerHTML = `
+    <div class="stat red"><b>${red}</b><span>متأخر</span></div>
+    <div class="stat amber"><b>${amber}</b><span>قرّب الميعاد</span></div>
+    <div class="stat green"><b>${green}</b><span>في وقته</span></div>
+  `;
+}
+
+function fmt(n){
+  return n.toLocaleString('ar-EG', {maximumFractionDigits:0});
+}
+
+function renderClients(){
+  const list = document.getElementById('clientsList');
+  const map = {};
+
+  orders.forEach(o=>{
+    const key = o.name.trim();
+    if(!key) return;
+    if(!map[key]) map[key] = {name:key, orders:[], txns:[]};
+    map[key].orders.push(o);
+  });
+
+  transactions.forEach(t=>{
+    const key = (t.client||'').trim();
+    if(!key) return;
+    if(!map[key]) map[key] = {name:key, orders:[], txns:[]};
+    map[key].txns.push(t);
+  });
+
+  const clients = Object.values(map).map(c=>{
+    const ordersTotal = c.orders.reduce((s,o)=>s+(o.price||0),0);
+    const ordersPaid = c.orders.filter(o=>o.paid).reduce((s,o)=>s+(o.price||0),0);
+    const txnsIn = c.txns.filter(t=>t.type==='in').reduce((s,t)=>s+t.amount,0);
+    const txnsOut = c.txns.filter(t=>t.type==='out').reduce((s,t)=>s+t.amount,0);
+    const total = ordersTotal;
+    const paid = ordersPaid + txnsIn - txnsOut;
+    return {...c, total, paid, remaining: total-paid};
+  }).sort((a,b)=> b.remaining - a.remaining || b.total - a.total);
+
+  if(clients.length===0){
+    list.innerHTML = '<div class="empty">مفيش عملاء مسجلين لسه.</div>';
+    return;
+  }
+
+  list.innerHTML = clients.map((c,i)=>{
+    const orderRows = c.orders
+      .sort((a,b)=> new Date(b.deadline)-new Date(a.deadline))
+      .map(o=>{
+        const dateFmt = new Date(o.deadline).toLocaleDateString('ar-EG',{day:'numeric',month:'short'});
+        return `<div class="client-order-row">
+          <div>
+            <div>${escapeHtml(o.note || 'أوردر')}</div>
+            <div class="meta">تسليم ${dateFmt}${o.price ? ' · '+o.price+' ج.م' : ''}</div>
+          </div>
+          <span class="pay-badge ${o.paid?'paid':'unpaid'}" onclick="togglePaid('${o.id}')">${o.paid?'اتدفع':'لسه'}</span>
+        </div>`;
+      }).join('');
+
+    const txnRows = c.txns
+      .sort((a,b)=> new Date(b.date)-new Date(a.date))
+      .map(t=>{
+        const dateFmt = new Date(t.date).toLocaleDateString('ar-EG',{day:'numeric',month:'short'});
+        return `<div class="client-order-row">
+          <div>
+            <div>${escapeHtml(t.desc)}</div>
+            <div class="meta">${dateFmt}</div>
+          </div>
+          <span class="t-amount ${t.type}">${t.type==='in'?'+':'-'}${fmt(t.amount)}</span>
+        </div>`;
+      }).join('');
+
+    return `<div class="client-card">
+      <div class="client-head" onclick="toggleClient(${i})">
+        <span class="name">${escapeHtml(c.name)}</span>
+        <div class="nums">
+          <span>الإجمالي <b>${fmt(c.total)}</b></span>
+          <span>مدفوع <b style="color:var(--green)">${fmt(c.paid)}</b></span>
+          <span>متبقي <b style="color:${c.remaining>0?'var(--amber)':'var(--text)'}">${fmt(c.remaining)}</b></span>
+        </div>
+      </div>
+      <div class="client-body" id="client-body-${i}">${orderRows}${txnRows}${(!orderRows && !txnRows) ? '<div class="empty">لا يوجد تفاصيل</div>' : ''}</div>
+    </div>`;
+  }).join('');
+}
+
+function toggleClient(i){
+  const el = document.getElementById('client-body-'+i);
+  el.classList.toggle('open');
+}
+
+function renderMoney(){
+  // order payments list
+  const payList = document.getElementById('orderPaymentsList');
+  const priced = orders.filter(o=>o.price>0).sort((a,b)=> new Date(b.deadline)-new Date(a.deadline));
+  if(priced.length===0){
+    payList.innerHTML = '<div class="empty">مفيش أوردرات بسعر مسجل لسه.</div>';
+  } else {
+    payList.innerHTML = priced.map(o=>`
+      <div class="txn">
+        <div>
+          <div class="t-desc">${escapeHtml(o.name)}</div>
+          <div class="t-date">${o.price} ج.م</div>
+        </div>
+        <span class="pay-badge ${o.paid?'paid':'unpaid'}" onclick="togglePaid('${o.id}')">${o.paid?'اتدفع':'لسه'}</span>
+      </div>
+    `).join('');
+  }
+
+  // general transactions list
+  const txnList = document.getElementById('txnsList');
+  const sortedTxns = [...transactions].sort((a,b)=> new Date(b.date)-new Date(a.date));
+  if(sortedTxns.length===0){
+    txnList.innerHTML = '<div class="empty">مفيش معاملات مسجلة لسه.</div>';
+  } else {
+    txnList.innerHTML = sortedTxns.map(t=>{
+      const dateFmt = new Date(t.date).toLocaleDateString('ar-EG',{day:'numeric',month:'short'});
+      const clientTxt = t.client ? ` · ${escapeHtml(t.client)}` : '';
+      return `<div class="txn">
+        <div>
+          <div class="t-desc">${escapeHtml(t.desc)}</div>
+          <div class="t-date">${dateFmt}${clientTxt}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="t-amount ${t.type}">${t.type==='in'?'+':'-'}${fmt(t.amount)}</span>
+          <span class="icon-btn" onclick="removeTxn('${t.id}')">حذف</span>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // stats
+  const paidFromOrders = orders.filter(o=>o.paid).reduce((s,o)=>s+(o.price||0),0);
+  const unpaidFromOrders = orders.filter(o=>!o.paid).reduce((s,o)=>s+(o.price||0),0);
+  const incomeFromTxns = transactions.filter(t=>t.type==='in').reduce((s,t)=>s+t.amount,0);
+  const expenseFromTxns = transactions.filter(t=>t.type==='out').reduce((s,t)=>s+t.amount,0);
+
+  const totalIn = paidFromOrders + incomeFromTxns;
+  const totalOut = expenseFromTxns;
+  const net = totalIn - totalOut;
+
+  const bar = document.getElementById('moneyStatsBar');
+  bar.innerHTML = `
+    <div class="stat green"><b>${fmt(totalIn)}</b><span>متحصّل</span></div>
+    <div class="stat red"><b>${fmt(totalOut)}</b><span>مصروفات</span></div>
+    <div class="stat amber"><b>${fmt(unpaidFromOrders)}</b><span>مستحق من أوردرات</span></div>
+    <div class="stat"><b style="color:${net>=0?'var(--green)':'var(--red)'}">${fmt(net)}</b><span>الصافي</span></div>
+  `;
+}
+
+async function toggleTask(id){
+  marketingState.done[id] = !marketingState.done[id];
+  renderTasks();
+  saveMarketing();
+}
+
+function renderTasks(){
+  const list = document.getElementById('tasksList');
+  list.innerHTML = TASK_POOL.map(t=>{
+    const done = !!marketingState.done[t.id];
+    return `<div class="task" onclick="toggleTask('${t.id}')">
+      <input type="checkbox" ${done?'checked':''} onclick="event.stopPropagation(); toggleTask('${t.id}')">
+      <div>
+        <div class="t-title ${done?'done':''}">${t.title}</div>
+        <div class="t-time">${t.time}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const doneCount = TASK_POOL.filter(t=>marketingState.done[t.id]).length;
+  const pct = Math.round((doneCount/TASK_POOL.length)*100);
+  document.getElementById('progBar').style.width = pct+'%';
+  document.getElementById('progText').textContent = `${doneCount} من ${TASK_POOL.length}`;
+  document.getElementById('weekLabel').textContent = 'الأسبوع الحالي';
+}
+
+function escapeHtml(str){
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+function exportBackup(){
+  const data = {
+    orders, marketingState, transactions,
+    exportedAt: new Date().toISOString()
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `mr-retouch-backup-${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showStatus('اتنزلت النسخة الاحتياطية ✓', false);
+}
+
+function importBackup(file){
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev){
+    try{
+      const data = JSON.parse(ev.target.result);
+      if(!Array.isArray(data.orders)) throw new Error('invalid');
+      if(!confirm('هيتم استبدال كل البيانات الحالية بالنسخة اللي في الملف ده. متأكد؟')) return;
+      orders = data.orders || [];
+      marketingState = data.marketingState || {week:getWeekKey(), done:{}};
+      transactions = data.transactions || [];
+      saveOrders(); saveMarketing(); saveTxns();
+      renderOrders(); renderTasks(); renderMoney(); renderClients();
+      showStatus('اترجعت النسخة الاحتياطية ✓', false);
+    }catch(err){
+      showStatus('الملف مش صالح', true);
+    }
+  };
+  reader.readAsText(file);
+}
+
+document.getElementById('importFile').addEventListener('change', function(e){
+  importBackup(e.target.files[0]);
+  e.target.value = '';
+});
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
+
+loadAll();
+</script>
+</body>
+</html>
