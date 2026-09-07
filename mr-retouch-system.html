@@ -329,7 +329,22 @@
   </div>
 </div>
 
-<script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAXriIKaHXTNHVv2zoma4vUxad_IMPMXlE",
+  authDomain: "mr-retouch.firebaseapp.com",
+  projectId: "mr-retouch",
+  storageBucket: "mr-retouch.firebasestorage.app",
+  messagingSenderId: "617697464519",
+  appId: "1:617697464519:web:d4ce2337ba32352092aee2"
+};
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getFirestore(firebaseApp);
+const dataDocRef = doc(db, 'mrretouch', 'main');
+
 const DAY = 24*60*60*1000;
 
 const TASK_POOL = [
@@ -363,58 +378,51 @@ function showStatus(msg, isError){
 }
 
 function loadAll(){
-  try{
-    const o = localStorage.getItem('mrretouch-orders');
-    orders = o ? JSON.parse(o) : [];
-  }catch(e){ orders = []; }
-
-  try{
-    const m = localStorage.getItem('mrretouch-marketing');
-    marketingState = m ? JSON.parse(m) : {week:'', done:{}};
-  }catch(e){ marketingState = {week:'', done:{}}; }
-
-  try{
-    const t = localStorage.getItem('mrretouch-transactions');
-    transactions = t ? JSON.parse(t) : [];
-  }catch(e){ transactions = []; }
-
-  const wk = getWeekKey();
-  if(marketingState.week !== wk){
-    marketingState = {week: wk, done:{}};
-    saveMarketing();
-  }
-
   document.getElementById('txnDate').valueAsDate = new Date();
 
-  renderOrders();
-  renderTasks();
-  renderMoney();
-  renderClients();
+  onSnapshot(dataDocRef, (snap)=>{
+    if(snap.exists()){
+      const data = snap.data();
+      orders = data.orders || [];
+      marketingState = data.marketingState || {week:'', done:{}};
+      transactions = data.transactions || [];
+
+      const wk = getWeekKey();
+      if(marketingState.week !== wk){
+        marketingState = {week: wk, done:{}};
+        saveMarketing();
+      }
+    } else {
+      orders = [];
+      marketingState = {week: getWeekKey(), done:{}};
+      transactions = [];
+      pushToCloud();
+    }
+    renderOrders();
+    renderTasks();
+    renderMoney();
+    renderClients();
+  }, (err)=>{
+    showStatus('تعذر الاتصال بقاعدة البيانات - تأكد من الإنترنت', true);
+  });
+}
+
+function pushToCloud(){
+  setDoc(dataDocRef, {orders, marketingState, transactions, updatedAt: Date.now()})
+    .catch(()=>{ showStatus('تعذر الحفظ على السحابة - جرب تاني', true); });
 }
 
 function saveOrders(){
-  try{
-    localStorage.setItem('mrretouch-orders', JSON.stringify(orders));
-    return true;
-  }catch(e){
-    showStatus('حصل خطأ في الحفظ - جرب تاني', true);
-    return false;
-  }
+  pushToCloud();
+  return true;
 }
 function saveMarketing(){
-  try{
-    localStorage.setItem('mrretouch-marketing', JSON.stringify(marketingState));
-    return true;
-  }catch(e){ return false; }
+  pushToCloud();
+  return true;
 }
 function saveTxns(){
-  try{
-    localStorage.setItem('mrretouch-transactions', JSON.stringify(transactions));
-    return true;
-  }catch(e){
-    showStatus('حصل خطأ في الحفظ - جرب تاني', true);
-    return false;
-  }
+  pushToCloud();
+  return true;
 }
 
 function addOrder(){
@@ -864,6 +872,11 @@ if('serviceWorker' in navigator){
     navigator.serviceWorker.register('sw.js').catch(()=>{});
   });
 }
+
+Object.assign(window, {
+  addOrder, editOrder, cancelEditOrder, removeOrder, markDelivered, toggleArchive,
+  togglePaid, addTxn, removeTxn, toggleClient, toggleTask, exportBackup
+});
 
 loadAll();
 </script>
