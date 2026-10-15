@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mr. Retouch | سجل الأوردرات</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#080808;--card:#141210;--ink:#f3ead2;--mut:#a09479;--line:#2f2813;--acc:#d4a437;--accbg:#2b2210;--red:#f0705f;--redbg:#3a1a16;--amb:#e6b64c;--ambbg:#30250e;--grn:#86d296;--grnbg:#14281a;--blu:#c9b273;--blubg:#262012;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Cairo,Tahoma,Arial,sans-serif;font-size:15px;line-height:1.6}
+.wrap{max-width:1100px;margin:0 auto;padding:16px}
+header{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:14px}
+h1{margin:0;font-size:22px;font-weight:800}h1 small{display:block;font-size:13px;color:var(--mut);font-weight:400}
+button,input,select,textarea{font:inherit;color:inherit}
+.btn{border:1px solid var(--line);background:var(--card);padding:7px 14px;border-radius:8px;cursor:pointer}
+.btn:hover{border-color:var(--acc)}
+.btn.p{background:var(--acc);border-color:var(--acc);color:#1a1405;font-weight:600}
+.btn.s{padding:2px 9px;font-size:13px}
+.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.st{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+.st b{display:block;font-size:22px;font-weight:800}.st span{color:var(--mut);font-size:13px}
+.st.hot{border-color:var(--red)}.st.hot b{color:var(--red)}
+.st.money b{color:var(--acc)}
+.bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;align-items:center}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:3px 14px;cursor:pointer;font-size:14px}
+.chip.on{background:var(--acc);color:#1a1405;border-color:var(--acc)}
+input,select,textarea{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:7px 10px;width:100%}
+.bar input{width:200px;margin-inline-start:auto}
+.tw{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:10px}
+table{width:100%;border-collapse:collapse;min-width:860px}
+th{text-align:start;font-size:13px;color:var(--mut);font-weight:600;padding:9px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+tr.late td:first-child{box-shadow:inset -4px 0 var(--red)}
+td small{display:block;color:var(--mut);font-size:12px}
+.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.tag{display:inline-block;border-radius:6px;padding:0 9px;font-size:12.5px;font-weight:600;white-space:nowrap}
+.t-new{background:var(--blubg);color:var(--blu)}.t-work{background:var(--ambbg);color:var(--amb)}
+.t-rev{background:var(--accbg);color:var(--acc)}.t-done{background:var(--grnbg);color:var(--grn)}
+.t-late{background:var(--redbg);color:var(--red)}
+.rem{font-weight:800}.rem.z{color:var(--grn)}.rem.p{color:var(--red)}
+.prog{height:4px;background:var(--line);border-radius:4px;margin-top:3px;overflow:hidden;min-width:70px}.prog i{display:block;height:100%;background:var(--acc)}
+.acts{display:flex;gap:4px;flex-wrap:wrap}
+.empty{padding:36px;text-align:center;color:var(--mut)}
+dialog{border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);padding:18px;width:min(520px,94vw)}
+dialog::backdrop{background:rgba(10,20,30,.5)}
+dialog h2{margin:0 0 12px;font-size:18px}
+.g{display:grid;grid-template-columns:1fr 1fr;gap:10px}.g .f{grid-column:1/-1}
+label{font-size:13px;color:var(--mut);display:block}
+.calc{background:var(--bg);border-radius:8px;padding:8px 12px;margin-top:10px;display:flex;justify-content:space-between;font-weight:600}
+.ft{display:flex;gap:8px;margin-top:14px;justify-content:flex-start}
+.cl{display:none}.cl.on{display:block}
+.note{color:var(--mut);font-size:12.5px;margin-top:12px}
+header{background:#000;border:1px solid var(--line);border-bottom:2px solid var(--acc);border-radius:12px;padding:8px 16px}
+.brand{display:flex;align-items:center;gap:14px}.logo{height:62px;mix-blend-mode:lighten}.brand small{color:var(--mut)}
+.hid{display:none}.two{display:grid;grid-template-columns:1.4fr 1fr;gap:12px;align-items:start;margin-bottom:12px}
+@media(max-width:800px){.two{grid-template-columns:1fr}}
+.tw.s table{min-width:0}.pl{font-weight:600;margin:0 0 8px}.neg{color:var(--red)}
+.cb{display:flex;justify-content:space-between;font-size:14px}.cbar{height:5px;background:var(--line);border-radius:4px;margin:2px 0 8px}.cbar i{display:block;height:100%;background:var(--acc)}
+tr.sel td{background:var(--accbg)}
+input[type=checkbox]{width:auto;accent-color:var(--acc)}.lk{background:none;border:0;padding:0;color:var(--acc);font-weight:700;cursor:pointer;text-align:start}
+#lock{display:none;min-height:80vh;align-items:center;justify-content:center;padding:16px}
+body.locked #lock{display:flex}body.locked .wrap{display:none}
+.lb{width:min(360px,100%);background:#000;border:1px solid var(--line);border-top:2px solid var(--acc);border-radius:14px;padding:22px;text-align:center}
+.lb .logo{height:70px;margin-bottom:6px}.lb h2{margin:6px 0 14px;font-size:18px}.lb input{margin-bottom:10px;text-align:center}
+</style>
+</head>
+<body class="locked">
+<div id="lock"><div class="lb"><img class="logo" alt="Mr. Retouch"><h2 id="lt"></h2>
+<input type="password" id="lp" placeholder="الباسورد" autocomplete="current-password"><input type="password" id="lp2" placeholder="أعد كتابة الباسورد" hidden>
+<div id="le" class="neg" style="min-height:24px"></div><button class="btn p" id="lb" style="width:100%">دخول</button></div></div>
+<div class="wrap">
+<header>
+ <div class="brand"><img class="logo" alt="Mr. Retouch" src="data:image/webp;base64,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"><small>سجل الأوردرات والحسابات</small></div>
+ <div class="bar" style="margin:0">
+  <button class="btn p" id="add">+ أوردر جديد</button>
+  <button class="btn" id="csv">تصدير Excel</button>
+  <button class="btn" id="bk">نسخة احتياطية</button>
+  <button class="btn" id="rs">استرجاع</button>
+  <input type="file" id="file" accept=".json" hidden>
+  <button class="btn" id="cp">تغيير الباسورد</button><button class="btn" id="lk">قفل</button><button class="btn" id="gh">مزامنة GitHub <small id="gs" style="color:var(--mut)"></small></button>
+ </div>
+</header>
+<div class="bar" id="tabs"><button class="chip on" data-t="o">الأوردرات</button><button class="chip" data-t="f">الحسابات الشهرية</button><button class="chip" data-t="c">حسابات العملاء</button></div>
+<div id="v1"><section class="stats" id="stats"></section>
+<div class="bar" id="chips"></div>
+<div class="bar"><input id="q" placeholder="بحث بالعميل أو اسم الشغل"></div>
+<div class="tw"><table><thead><tr><th>العميل / الشغل</th><th>الصور</th><th>الاستلام</th><th>التسليم</th><th>الحالة</th><th>الإجمالي</th><th>المدفوع</th><th>الباقي</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
+<p class="note">البيانات محفوظة على المتصفح ده بس. اعمل «نسخة احتياطية» كل فترة وخلّي الملف عندك.</p></div>
+<div id="v2" class="hid">
+<div class="bar"><button class="btn" id="pm">الشهر السابق</button><input type="month" id="mo" style="width:170px;margin:0"><button class="btn" id="nm">الشهر التالي</button><button class="btn p" id="ax" style="margin-inline-start:auto">+ مصروف / دخل</button></div>
+<section class="stats" id="fs"></section>
+<div class="two"><div><div class="tw s"><table><thead><tr><th>التاريخ</th><th>النوع</th><th>البيان</th><th>المبلغ</th><th></th></tr></thead><tbody id="lg"></tbody></table></div>
+<div class="st" style="margin-top:12px"><p class="pl">المصروفات حسب النوع</p><div id="cats"></div></div></div>
+<div class="tw s"><table><thead><tr><th>الشهر</th><th>الدخل</th><th>المصروفات</th><th>الصافي</th></tr></thead><tbody id="yr"></tbody></table></div></div>
+<p class="note">الدخل بيتحسب تلقائي من الدفعات اللي بتسجلها في الأوردرات حسب تاريخ استلام الدفعة. دوس على أي شهر في الجدول عشان تفتحه.</p>
+</div>
+<div id="v3" class="hid">
+<div class="bar"><button class="btn" id="cpm">الشهر السابق</button><input type="month" id="cmo" style="width:170px;margin:0"><button class="btn" id="cnm">الشهر التالي</button>
+<span id="cfl" style="margin-inline-start:auto"><button class="chip on" data-cf="all">كل العملاء</button> <button class="chip" data-cf="sub">الاشتراك الشهري</button></span></div>
+<section class="stats" id="cs"></section>
+<div class="tw s"><table style="min-width:780px"><thead><tr><th>العميل</th><th>اشتراك شهري</th><th>الأوردرات</th><th>الصور</th><th>إجمالي الشهر</th><th>المدفوع</th><th>متبقي الشهر</th><th>الرصيد الكلي</th><th></th></tr></thead><tbody id="cbody"></tbody></table></div>
+<p class="note">الأرقام حسب تاريخ استلام الأوردر. «الرصيد الكلي» هو كل المتبقي عند العميل من كل الشهور. علّم على العميل «اشتراك شهري» عشان يفضل ظاهر حتى لو معندوش أوردرات الشهر ده.</p>
+</div>
+</div>
+
+<dialog id="dlg"><form method="dialog" id="fm" onsubmit="return false">
+ <h2 id="dt">أوردر جديد</h2>
+ <div class="g">
+  <div><label>العميل (المصور)</label><input id="cl" list="cls" required><datalist id="cls"></datalist></div>
+  <div><label>اسم الشغل / الفرح</label><input id="ti"></div>
+  <div><label>عدد الصور</label><input id="ct" type="number" min="0"></div>
+  <div><label>الحالة</label><select id="stt"><option value="new">جديد</option><option value="work">جاري التنفيذ</option><option value="rev">مراجعة العميل</option><option value="done">تم التسليم</option></select></div>
+  <div><label>تاريخ الاستلام</label><input id="rc" type="date" required></div>
+  <div><label>تاريخ التسليم</label><input id="du" type="date" required></div>
+  <div><label>الإجمالي (ج.م)</label><input id="tt" type="number" min="0" required></div>
+  <div><label>المدفوع (ج.م)</label><input id="pd" type="number" min="0" value="0"></div>
+  <div class="f"><label>ملاحظات</label><textarea id="nt" rows="2"></textarea></div>
+ </div>
+ <div class="calc"><span>الباقي</span><span id="cr">0 ج.م</span></div>
+ <div class="ft"><button class="btn p" id="sv">حفظ</button><button class="btn" id="cn">إلغاء</button></div>
+</form></dialog>
+
+<dialog id="pdlg"><form method="dialog" onsubmit="return false">
+ <h2 id="pt">تسجيل دفعة</h2>
+ <label>المبلغ (ج.م)</label><input id="pa" type="number" min="0">
+ <div class="ft"><button class="btn p" id="ps">تسجيل</button><button class="btn" id="pc">إلغاء</button></div>
+</form></dialog>
+
+<dialog id="sdlg"><form method="dialog" onsubmit="return false">
+ <h2 id="sh2">كشف حساب</h2>
+ <textarea id="stx" rows="12" readonly style="line-height:1.7"></textarea>
+ <div class="ft"><button class="btn p" id="scp">نسخ الكشف</button><button class="btn" id="scl">إغلاق</button></div>
+</form></dialog>
+<dialog id="pwdlg"><form method="dialog" onsubmit="return false">
+ <h2>تغيير الباسورد</h2>
+ <label>الباسورد الحالي</label><input type="password" id="po">
+ <label style="margin-top:8px">الباسورد الجديد</label><input type="password" id="pn">
+ <label style="margin-top:8px">تأكيد الجديد</label><input type="password" id="pq">
+ <div id="pe" class="neg" style="margin-top:8px;min-height:24px"></div>
+ <div class="ft"><button class="btn p" id="pk">حفظ</button><button class="btn" id="px">إلغاء</button></div>
+</form></dialog>
+<dialog id="ghdlg"><form method="dialog" onsubmit="return false">
+ <h2>مزامنة مع GitHub</h2>
+ <label>مستودع البيانات (Private)</label><input id="ghr" dir="ltr" placeholder="username/mr-retouch-data">
+ <label style="margin-top:8px">التوكن (Fine-grained، Contents: Read and write)</label><input id="ght" type="password" dir="ltr">
+ <div id="ghm" style="margin-top:8px;min-height:44px;color:var(--mut);font-size:14px"></div>
+ <div class="ft" style="flex-wrap:wrap"><button class="btn p" id="ghs">حفظ واختبار</button><button class="btn" id="ghd">تحميل من GitHub</button><button class="btn" id="ghu">رفع الآن</button><button class="btn" id="ghx">إغلاق</button><button class="btn" id="ghf" style="margin-inline-start:auto">فصل</button></div>
+</form></dialog>
+<dialog id="xdlg"><form method="dialog" onsubmit="return false">
+ <h2>تسجيل حركة مالية</h2>
+ <div class="g">
+  <div><label>النوع</label><select id="xt"><option value="out">مصروف</option><option value="in">دخل إضافي</option></select></div>
+  <div><label>التاريخ</label><input id="xd" type="date"></div>
+  <div><label>التصنيف</label><input id="xc" list="xcs"><datalist id="xcs"><option value="إيجار"><option value="إنترنت وكهرباء"><option value="برامج واشتراكات"><option value="معدات وصيانة"><option value="مواصلات"><option value="إعلانات"><option value="أخرى"></datalist></div>
+  <div><label>المبلغ (ج.م)</label><input id="xa" type="number" min="0"></div>
+  <div class="f"><label>البيان</label><input id="xs"></div>
+ </div>
+ <div class="ft"><button class="btn p" id="xv">حفظ</button><button class="btn" id="xn">إلغاء</button></div>
+</form></dialog>
+<script>
+const $=id=>document.getElementById(id);
+let D=[],F='all',E=null,P=null;
+const KEY='mrretouch_orders_v1';
+try{D=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){D=[]}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(D))}catch(e){}touch()}
+const LK='mrretouch_ledger_v1';let X=[];try{X=JSON.parse(localStorage.getItem(LK)||'[]')}catch(e){X=[]}
+function saveX(){try{localStorage.setItem(LK,JSON.stringify(X))}catch(e){}touch()}
+const CK='mrretouch_clients_v1';let C={};try{C=JSON.parse(localStorage.getItem(CK)||'{}')}catch(e){C={}}
+function saveC(){try{localStorage.setItem(CK,JSON.stringify(C))}catch(e){}touch()}
+const ST={new:['جديد','t-new'],work:['جاري التنفيذ','t-work'],rev:['مراجعة العميل','t-rev'],done:['تم التسليم','t-done']};
+const today=()=>{const d=new Date();return new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10)};
+const days=(a,b)=>Math.round((new Date(b)-new Date(a))/864e5);
+const fm=n=>(+n||0).toLocaleString('en-US');
+const fd=s=>s?new Date(s+'T00:00').toLocaleDateString('ar-EG',{day:'numeric',month:'short'}):'-';
+const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const rem=o=>Math.max(0,o.total-o.paid);
+const late=o=>o.status!=='done'&&o.due<today();
+
+function view(){
+ const t=today(),a=D.filter(o=>o.status!=='done'),L=D.filter(late);
+ const wk=a.filter(o=>o.due>=t&&days(t,o.due)<=7);
+ const out=D.reduce((s,o)=>s+rem(o),0);
+ const mo=t.slice(0,7),inc=D.reduce((s,o)=>s+(o.pays||[]).filter(p=>p.d.startsWith(mo)).reduce((x,p)=>x+p.a,0),0);
+ $('stats').innerHTML=
+  `<div class="st"><b>${a.length}</b><span>أوردرات شغالة</span></div>`+
+  `<div class="st ${L.length?'hot':''}"><b>${L.length}</b><span>متأخرة عن التسليم</span></div>`+
+  `<div class="st"><b>${wk.length}</b><span>تسليمها خلال 7 أيام</span></div>`+
+  `<div class="st money"><b>${fm(out)}</b><span>مبالغ متبقية عند العملاء (ج.م)</span></div>`+
+  `<div class="st money"><b>${fm(inc)}</b><span>اتحصّل الشهر ده (ج.م)</span></div>`;
+ const fl=[['all','الكل'],['act','شغال'],['late','متأخر'],['due','فيه باقي'],['done','تم التسليم']];
+ $('chips').innerHTML=fl.map(([k,v])=>`<button class="chip ${F===k?'on':''}" data-f="${k}">${v}</button>`).join('');
+ const q=$('q').value.trim().toLowerCase();
+ let r=D.filter(o=>(F==='all'||(F==='act'&&o.status!=='done')||(F==='late'&&late(o))||(F==='due'&&rem(o)>0)||(F==='done'&&o.status==='done'))&&(!q||(o.client+' '+o.title).toLowerCase().includes(q)));
+ r.sort((x,y)=>(x.status==='done')-(y.status==='done')||x.due.localeCompare(y.due));
+ $('rows').innerHTML=r.length?r.map(o=>{
+  const rm=rem(o),pc=o.total?Math.min(100,o.paid/o.total*100):0,dl=days(t,o.due);
+  const dn=o.status==='done'?'':late(o)?`<small style="color:var(--red)">متأخر ${-dl} يوم</small>`:dl===0?`<small style="color:var(--amb)">النهارده</small>`:dl<=3?`<small style="color:var(--amb)">باقي ${dl} يوم</small>`:'';
+  return `<tr class="${late(o)?'late':''}"><td><b>${esc(o.client)}</b><small>${esc(o.title)}${o.notes?' • '+esc(o.notes):''}</small></td>
+  <td class="num">${o.count||'-'}</td><td class="num">${fd(o.received)}</td><td class="num">${fd(o.due)}${dn}</td>
+  <td><span class="tag ${late(o)?'t-late':ST[o.status][1]}">${late(o)?'متأخر':ST[o.status][0]}</span></td>
+  <td class="num">${fm(o.total)}</td><td class="num">${fm(o.paid)}<div class="prog"><i style="width:${pc}%"></i></div></td>
+  <td class="num rem ${rm?'p':'z'}">${rm?fm(rm):'مدفوع ✓'}</td>
+  <td><div class="acts">${rm?`<button class="btn s" data-a="pay" data-i="${o.id}">+ دفعة</button>`:''}${o.status!=='done'?`<button class="btn s" data-a="dn" data-i="${o.id}">تسليم</button>`:''}<button class="btn s" data-a="ed" data-i="${o.id}">تعديل</button><button class="btn s" data-a="rm" data-i="${o.id}">حذف</button></div></td></tr>`}).join(''):`<tr><td colspan="9" class="empty">مفيش أوردرات هنا. دوس «أوردر جديد» عشان تبدأ.</td></tr>`;
+ $('cls').innerHTML=[...new Set(D.map(o=>o.client))].map(c=>`<option value="${esc(c)}">`).join('');
+}
+function calc(){$('cr').textContent=fm(Math.max(0,(+$('tt').value||0)-(+$('pd').value||0)))+' ج.م'}
+function openForm(o){
+ E=o?o.id:null;$('dt').textContent=o?'تعديل الأوردر':'أوردر جديد';
+ $('cl').value=o?o.client:'';$('ti').value=o?o.title:'';$('ct').value=o?o.count:'';
+ $('stt').value=o?o.status:'new';$('rc').value=o?o.received:today();$('du').value=o?o.due:'';
+ $('tt').value=o?o.total:'';$('pd').value=o?o.paid:0;$('nt').value=o?o.notes:'';calc();$('dlg').showModal();
+}
+$('add').onclick=()=>openForm();
+$('cn').onclick=()=>$('dlg').close();
+['tt','pd'].forEach(i=>$(i).oninput=calc);
+$('sv').onclick=()=>{
+ if(!$('fm').reportValidity())return;
+ if($('du').value<$('rc').value){alert('تاريخ التسليم لازم يكون بعد الاستلام');return}
+ const tot=+$('tt').value||0,pd=Math.min(+$('pd').value||0,tot);
+ const o={client:$('cl').value.trim(),title:$('ti').value.trim(),count:+$('ct').value||0,status:$('stt').value,received:$('rc').value,due:$('du').value,total:tot,paid:pd,notes:$('nt').value.trim()};
+ if(E){const x=D.find(z=>z.id===E);const diff=pd-x.paid;Object.assign(x,o);if(diff)(x.pays=x.pays||[]).push({d:today(),a:diff})}
+ else{o.id=Date.now().toString(36);o.pays=pd?[{d:today(),a:pd}]:[];D.push(o)}
+ save();$('dlg').close();view();
+};
+$('rows').onclick=e=>{
+ const b=e.target.closest('button');if(!b)return;const o=D.find(x=>x.id===b.dataset.i);if(!o)return;
+ if(b.dataset.a==='ed')openForm(o);
+ if(b.dataset.a==='dn'){o.status='done';save();view()}
+ if(b.dataset.a==='rm'&&confirm('تحذف أوردر '+o.client+'؟')){D=D.filter(x=>x!==o);save();view()}
+ if(b.dataset.a==='pay'){P=o.id;$('pt').textContent='دفعة من '+o.client+' (الباقي '+fm(rem(o))+')';$('pa').value=rem(o);$('pdlg').showModal()}
+};
+$('pc').onclick=()=>$('pdlg').close();
+$('ps').onclick=()=>{const o=D.find(x=>x.id===P),a=Math.min(+$('pa').value||0,rem(o));if(a>0){o.paid+=a;(o.pays=o.pays||[]).push({d:today(),a});save();view()}$('pdlg').close()};
+$('chips').onclick=e=>{const b=e.target.closest('[data-f]');if(b){F=b.dataset.f;view()}};
+$('q').oninput=view;
+function dl(name,txt,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type}));a.download=name;a.click()}
+$('csv').onclick=()=>{const h=['العميل','الشغل','عدد الصور','الاستلام','التسليم','الحالة','الإجمالي','المدفوع','الباقي','ملاحظات'];
+ const r=D.map(o=>[o.client,o.title,o.count,o.received,o.due,ST[o.status][0],o.total,o.paid,rem(o),o.notes].map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(','));
+ dl('orders-'+today()+'.csv','\ufeff'+[h.join(','),...r].join('\n'),'text/csv')};
+$('bk').onclick=()=>dl('mr-retouch-backup-'+today()+'.json',JSON.stringify({orders:D,ledger:X,clients:C}),'application/json');
+$('rs').onclick=()=>$('file').click();
+$('file').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result),o=Array.isArray(x)?x:x.orders;if(Array.isArray(o)&&confirm('هيتم استبدال البيانات الحالية بالنسخة دي. متأكد؟')){D=o;if(x.ledger)X=x.ledger;if(x.clients)C=x.clients;save();saveX();saveC();view();fin();cli()}}catch(_){alert('الملف مش صالح')}};r.readAsText(f);e.target.value=''};
+let M=today().slice(0,7);
+const incM=m=>D.reduce((s,o)=>s+(o.pays||[]).filter(p=>p.d.startsWith(m)).reduce((x,p)=>x+p.a,0),0)+X.filter(e=>e.t==='in'&&e.d.startsWith(m)).reduce((s,e)=>s+e.a,0);
+const expM=m=>X.filter(e=>e.t==='out'&&e.d.startsWith(m)).reduce((s,e)=>s+e.a,0);
+const mn=m=>new Date(m+'-01T00:00').toLocaleDateString('ar-EG',{month:'long'});
+function fin(){
+ const i=incM(M),x=expM(M),n=i-x;$('mo').value=M;
+ $('fs').innerHTML=`<div class="st money"><b>${fm(i)}</b><span>الدخل (ج.م)</span></div><div class="st"><b class="neg">${fm(x)}</b><span>المصروفات (ج.م)</span></div><div class="st ${n<0?'hot':'money'}"><b>${fm(n)}</b><span>صافي الربح (ج.م)</span></div><div class="st"><b>${i?Math.round(n/i*100):0}%</b><span>هامش الربح</span></div>`;
+ const L=[];
+ D.forEach(o=>(o.pays||[]).forEach(p=>{if(p.d.startsWith(M))L.push({d:p.d,k:'دفعة أوردر',s:o.client+(o.title?' - '+o.title:''),a:p.a,in:1})}));
+ X.forEach(e=>{if(e.d.startsWith(M))L.push({d:e.d,k:e.t==='in'?'دخل إضافي':(e.c||'مصروف'),s:e.s,a:e.a,in:e.t==='in',id:e.id})});
+ L.sort((a,b)=>b.d.localeCompare(a.d));
+ $('lg').innerHTML=L.length?L.map(l=>`<tr><td class="num">${fd(l.d)}</td><td><span class="tag ${l.in?'t-done':'t-late'}">${esc(l.k)}</span></td><td>${esc(l.s)}</td><td class="num ${l.in?'':'neg'}">${l.in?'+':'-'}${fm(l.a)}</td><td>${l.id?`<button class="btn s" data-x="${l.id}">حذف</button>`:''}</td></tr>`).join(''):'<tr><td colspan="5" class="empty">مفيش حركات في '+mn(M)+'. سجّل مصروف أو دفعة.</td></tr>';
+ const cs={};X.forEach(e=>{if(e.t==='out'&&e.d.startsWith(M)){const c=e.c||'أخرى';cs[c]=(cs[c]||0)+e.a}});
+ $('cats').innerHTML=x?Object.entries(cs).sort((a,b)=>b[1]-a[1]).map(([c,v])=>`<div class="cb"><span>${esc(c)}</span><span class="num">${fm(v)}</span></div><div class="cbar"><i style="width:${v/x*100}%"></i></div>`).join(''):'<div style="color:var(--mut)">مفيش مصروفات الشهر ده</div>';
+ const Y=M.slice(0,4);let ti=0,te=0,h='';
+ for(let k=1;k<=12;k++){const m=Y+'-'+String(k).padStart(2,'0'),a=incM(m),b=expM(m);ti+=a;te+=b;h+=`<tr data-m="${m}" class="${m===M?'sel':''}" style="cursor:pointer"><td>${mn(m)}</td><td class="num">${fm(a)}</td><td class="num">${fm(b)}</td><td class="num ${a<b?'neg':''}"><b>${fm(a-b)}</b></td></tr>`}
+ $('yr').innerHTML=h+`<tr><td><b>إجمالي ${Y}</b></td><td class="num"><b>${fm(ti)}</b></td><td class="num"><b>${fm(te)}</b></td><td class="num ${ti<te?'neg':''}"><b>${fm(ti-te)}</b></td></tr>`;
+}
+function sh(n){const[y,m]=M.split('-').map(Number),d=new Date(y,m-1+n,1);M=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');fin()}
+$('pm').onclick=()=>sh(-1);$('nm').onclick=()=>sh(1);
+$('mo').onchange=e=>{if(e.target.value){M=e.target.value;fin()}};
+$('yr').onclick=e=>{const r=e.target.closest('[data-m]');if(r){M=r.dataset.m;fin()}};
+$('lg').onclick=e=>{const b=e.target.closest('[data-x]');if(b&&confirm('تحذف الحركة دي؟')){X=X.filter(z=>z.id!==b.dataset.x);saveX();fin()}};
+$('tabs').onclick=e=>{const b=e.target.closest('[data-t]');if(!b)return;const t=b.dataset.t;['o','f','c'].forEach(k=>$({o:'v1',f:'v2',c:'v3'}[k]).classList.toggle('hid',k!==t));[...$('tabs').children].forEach(c=>c.classList.toggle('on',c===b));if(t==='f')fin();else if(t==='c')cli();else view()};
+$('ax').onclick=()=>{$('xt').value='out';$('xc').value='';$('xs').value='';$('xa').value='';$('xd').value=M===today().slice(0,7)?today():M+'-01';$('xdlg').showModal()};
+$('xn').onclick=()=>$('xdlg').close();
+$('xv').onclick=()=>{const a=+$('xa').value,d=$('xd').value;if(!(a>0)||!d){alert('اكتب المبلغ والتاريخ');return}
+ X.push({id:Date.now().toString(36),t:$('xt').value,d,c:$('xc').value.trim(),s:$('xs').value.trim(),a});saveX();M=d.slice(0,7);$('xdlg').close();fin()};
+let CM=today().slice(0,7),CF='all';
+function cdata(){
+ const a={},z=n=>a[n]=a[n]||{n,o:0,p:0,t:0,pd:0,r:0,bal:0};
+ D.forEach(o=>{const c=z(o.client);c.bal+=rem(o);if(o.received.startsWith(CM)){c.o++;c.p+=o.count||0;c.t+=o.total;c.pd+=o.paid;c.r+=rem(o)}});
+ Object.keys(C).forEach(k=>{if(C[k])z(k)});
+ return Object.values(a).filter(c=>CF==='sub'?C[c.n]:(c.o||C[c.n]||c.bal>0)).sort((x,y)=>y.o-x.o||y.bal-x.bal);
+}
+function cli(){
+ $('cmo').value=CM;const L=cdata(),S=(k)=>L.reduce((s,c)=>s+c[k],0);
+ $('cs').innerHTML=`<div class="st"><b>${L.filter(c=>c.o).length}</b><span>عملاء اشتغلوا في ${mn(CM)}</span></div><div class="st"><b>${S('o')}</b><span>أوردرات الشهر (${fm(S('p'))} صورة)</span></div><div class="st money"><b>${fm(S('t'))}</b><span>إجمالي الشهر (ج.م)</span></div><div class="st ${S('r')?'hot':'money'}"><b>${fm(S('r'))}</b><span>متبقي من أوردرات الشهر (ج.م)</span></div><div class="st ${S('bal')?'hot':'money'}"><b>${fm(S('bal'))}</b><span>الرصيد الكلي عند العملاء (ج.م)</span></div>`;
+ $('cbody').innerHTML=L.length?L.map(c=>`<tr><td><button class="lk" data-st="${esc(c.n)}">${esc(c.n)}</button></td><td><input type="checkbox" data-sub="${esc(c.n)}" ${C[c.n]?'checked':''} aria-label="اشتراك شهري"></td><td class="num">${c.o}</td><td class="num">${c.p||'-'}</td><td class="num">${fm(c.t)}</td><td class="num">${fm(c.pd)}</td><td class="num rem ${c.r?'p':'z'}">${c.r?fm(c.r):'0'}</td><td class="num rem ${c.bal?'p':'z'}">${c.bal?fm(c.bal):'مدفوع ✓'}</td><td><button class="btn s" data-st="${esc(c.n)}">كشف حساب</button></td></tr>`).join(''):'<tr><td colspan="9" class="empty">مفيش عملاء في الشهر ده. علّم على عميل «اشتراك شهري» أو سجّل أوردر.</td></tr>';
+}
+function csh(n){const[y,m]=CM.split('-').map(Number),d=new Date(y,m-1+n,1);CM=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');cli()}
+$('cpm').onclick=()=>csh(-1);$('cnm').onclick=()=>csh(1);
+$('cmo').onchange=e=>{if(e.target.value){CM=e.target.value;cli()}};
+$('cfl').onclick=e=>{const b=e.target.closest('[data-cf]');if(!b)return;CF=b.dataset.cf;[...$('cfl').querySelectorAll('.chip')].forEach(c=>c.classList.toggle('on',c===b));cli()};
+$('cbody').onchange=e=>{const k=e.target.dataset.sub;if(k!==undefined){C[k]=e.target.checked;saveC();cli()}};
+$('cbody').onclick=e=>{const b=e.target.closest('[data-st]');if(!b)return;const n=b.dataset.st;
+ const r=D.filter(o=>o.client===n&&o.received.startsWith(CM)).sort((x,y)=>x.received.localeCompare(y.received));
+ const t=r.reduce((s,o)=>s+o.total,0),pd=r.reduce((s,o)=>s+o.paid,0),bal=D.filter(o=>o.client===n).reduce((s,o)=>s+rem(o),0);
+ let x='كشف حساب: '+n+'\nشهر '+mn(CM)+' '+CM.slice(0,4)+'\n----------------\n';
+ x+=r.length?r.map((o,i)=>(i+1)+') '+(o.title||'أوردر')+(o.count?' ('+o.count+' صورة)':'')+'\n   استلام '+fd(o.received)+' - تسليم '+fd(o.due)+(o.status==='done'?' ✓':'')+'\n   الإجمالي '+fm(o.total)+' | المدفوع '+fm(o.paid)+' | المتبقي '+fm(rem(o))).join('\n'):'مفيش أوردرات في الشهر ده';
+ x+='\n----------------\nعدد الأوردرات: '+r.length+'\nإجمالي الشهر: '+fm(t)+' ج.م\nالمدفوع: '+fm(pd)+' ج.م\nمتبقي الشهر: '+fm(Math.max(0,t-pd))+' ج.م\nالرصيد الكلي المتبقي: '+fm(bal)+' ج.م\n\nMr. Retouch';
+ $('sh2').textContent='كشف حساب '+n;$('stx').value=x;$('scp').textContent='نسخ الكشف';$('sdlg').showModal()};
+$('scl').onclick=()=>$('sdlg').close();
+$('scp').onclick=()=>{const t=$('stx');t.select();try{navigator.clipboard.writeText(t.value)}catch(e){document.execCommand('copy')}$('scp').textContent='تم النسخ ✓'};
+const PK='mrretouch_pw_v1';let PW=null;try{PW=JSON.parse(localStorage.getItem(PK)||'null')}catch(e){}
+const hs=async(p,s)=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s+p)))].map(x=>x.toString(16).padStart(2,'0')).join('');
+const salt=()=>[...crypto.getRandomValues(new Uint8Array(8))].map(x=>x.toString(16)).join('');
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+function savePW(){try{localStorage.setItem(PK,JSON.stringify(PW))}catch(e){}}
+$('lock').querySelector('.logo').src=document.querySelector('header .logo').src;
+function lockUI(){const st=!PW;$('lt').textContent=st?'اعمل باسورد للنظام':'سجّل الدخول';$('lp2').hidden=!st;$('lb').textContent=st?'حفظ والدخول':'دخول';$('le').textContent='';$('lp').value=$('lp2').value='';document.body.classList.add('locked');$('lp').focus()}
+function unlock(){try{sessionStorage.setItem('mr_ok','1')}catch(e){}document.body.classList.remove('locked');$('lp').value=$('lp2').value=''}
+$('lb').onclick=async()=>{const p=$('lp').value;
+ if(!PW){if(p.length<4){$('le').textContent='الباسورد لازم يكون 4 خانات على الأقل';return}
+  if(p!==$('lp2').value){$('le').textContent='الباسورد مش متطابق';return}
+  const s=salt();PW={s,h:await hs(p,s)};savePW();unlock()}
+ else if(await hs(p,PW.s)===PW.h)unlock();
+ else{await wait(800);$('le').textContent='الباسورد غلط';$('lp').select()}};
+['lp','lp2'].forEach(i=>$(i).onkeydown=e=>{if(e.key==='Enter')$('lb').click()});
+$('lk').onclick=()=>{try{sessionStorage.removeItem('mr_ok')}catch(e){}lockUI()};
+$('cp').onclick=()=>{$('po').value=$('pn').value=$('pq').value='';$('pe').textContent='';$('pwdlg').showModal()};
+$('px').onclick=()=>$('pwdlg').close();
+$('pk').onclick=async()=>{const n=$('pn').value;
+ if(await hs($('po').value,PW.s)!==PW.h){$('pe').textContent='الباسورد الحالي غلط';return}
+ if(n.length<4){$('pe').textContent='الباسورد الجديد لازم يكون 4 خانات على الأقل';return}
+ if(n!==$('pq').value){$('pe').textContent='التأكيد مش متطابق';return}
+ const s=salt();PW={s,h:await hs(n,s)};savePW();$('pwdlg').close()};
+let u=false;try{u=sessionStorage.getItem('mr_ok')==='1'}catch(e){}
+if(PW&&u)document.body.classList.remove('locked');else lockUI();
+let GH={};try{GH=JSON.parse(localStorage.getItem('mrretouch_gh_v1')||'{}')}catch(e){GH={}}
+const saveGH=()=>{try{localStorage.setItem('mrretouch_gh_v1',JSON.stringify(GH))}catch(e){}};
+const setS=t=>{$('gs').textContent=t};
+const enc=t=>{let b='';new TextEncoder().encode(t).forEach(c=>b+=String.fromCharCode(c));return btoa(b)};
+const dec=b=>new TextDecoder().decode(Uint8Array.from(atob(b.replace(/\s/g,'')),c=>c.charCodeAt(0)));
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(D));localStorage.setItem(LK,JSON.stringify(X));localStorage.setItem(CK,JSON.stringify(C))}catch(e){}}
+const api=(path,o={})=>fetch('https://api.github.com/repos/'+GH.r+(path?'/contents/'+path:''),{...o,headers:{Authorization:'Bearer '+GH.t,Accept:'application/vnd.github+json','Content-Type':'application/json'}});
+function fail(r){return new Error(r.status===401?'التوكن غلط أو منتهي':r.status===403?'التوكن مالوش صلاحية Contents':r.status===404?'المستودع مش لاقيه (راجع الاسم والصلاحيات)':'خطأ من GitHub ('+r.status+')')}
+async function pull(){
+ const r=await api('data.json');if(r.status===404){const t=await api('');if(!t.ok)throw fail(t);return'none'}
+ if(!r.ok)throw fail(r);const j=await r.json();if(j.sha===GH.sha&&!GH.dirty)return'same';
+ const x=JSON.parse(dec(j.content));D=x.orders||[];X=x.ledger||[];C=x.clients||{};persist();GH.sha=j.sha;GH.dirty=false;saveGH();view();fin();cli();return'ok'}
+async function push(force){
+ const g=await api('data.json');let sha=null;
+ if(g.ok)sha=(await g.json()).sha;else if(g.status!==404)throw fail(g);
+ if(!force&&sha!==(GH.sha||null))return'conflict';
+ const b={message:'update '+new Date().toISOString(),content:enc(JSON.stringify({orders:D,ledger:X,clients:C,at:new Date().toISOString()}))};if(sha)b.sha=sha;
+ const r=await api('data.json',{method:'PUT',body:JSON.stringify(b)});if(!r.ok)throw fail(r);
+ GH.sha=(await r.json()).content.sha;GH.dirty=false;saveGH();return'ok'}
+const ghErr=e=>e instanceof TypeError?'مفيش اتصال بـ GitHub. المزامنة بتشتغل من الموقع المنشور على GitHub Pages أو من أي استضافة خارجية، مش جوه claude.ai.':e.message;
+let tm;
+function touch(){if(!GH.t)return;GH.dirty=true;saveGH();setS('غير متزامن');clearTimeout(tm);tm=setTimeout(autoSync,2500)}
+async function autoSync(){if(!GH.t)return;try{setS('جاري المزامنة…');const r=GH.dirty?await push():await pull();setS(r==='conflict'?'⚠ تعارض':'✓ متزامن')}catch(e){setS('⚠ مشكلة')}}
+$('gh').onclick=()=>{$('ghr').value=GH.r||'';$('ght').value=GH.t||'';$('ghm').textContent=GH.t?'متصل بـ '+GH.r+(GH.dirty?' (فيه تعديلات لسه متترفعتش)':''):'ادخل اسم المستودع والتوكن.';$('ghdlg').showModal()};
+$('ghx').onclick=()=>$('ghdlg').close();
+$('ghs').onclick=async()=>{const m=$('ghm');GH.r=$('ghr').value.trim();GH.t=$('ght').value.trim();if(!/^[\w.-]+\/[\w.-]+$/.test(GH.r)||!GH.t){m.textContent='اكتب اسم المستودع بالشكل username/repo والتوكن';return}
+ try{m.textContent='جاري الاختبار…';const r=await api('data.json');
+  if(r.status===404){const t=await api('');if(!t.ok)throw fail(t);GH.sha=null;await push(true);m.textContent='تم الاتصال وإنشاء data.json على GitHub ✓'}
+  else if(!r.ok)throw fail(r);
+  else{GH.sha=null;saveGH();if(!D.length&&!X.length){await pull();m.textContent='تم تحميل البيانات من GitHub ✓'}else m.textContent='فيه بيانات على GitHub وعندك بيانات على الجهاز. اختار «تحميل من GitHub» (يستبدل اللي عندك) أو «رفع الآن» (يستبدل اللي على GitHub).'}
+  saveGH();setS(GH.sha?'✓ متزامن':'')}catch(e){m.textContent=ghErr(e);delete GH.t;}};
+$('ghd').onclick=async()=>{if(!GH.t||!confirm('هيتم استبدال البيانات اللي على الجهاز ده ببيانات GitHub. متأكد؟'))return;try{GH.dirty=false;GH.sha=null;await pull();$('ghm').textContent='تم التحميل ✓';setS('✓ متزامن')}catch(e){$('ghm').textContent=ghErr(e)}};
+$('ghu').onclick=async()=>{if(!GH.t||!confirm('هيتم استبدال بيانات GitHub ببيانات الجهاز ده. متأكد؟'))return;try{await push(true);$('ghm').textContent='تم الرفع ✓';setS('✓ متزامن')}catch(e){$('ghm').textContent=ghErr(e)}};
+$('ghf').onclick=()=>{if(confirm('تفصل المزامنة على الجهاز ده؟ (البيانات هتفضل موجودة هنا)')){GH={};try{localStorage.removeItem('mrretouch_gh_v1')}catch(e){}setS('');$('ghdlg').close()}};
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)autoSync()});
+if(GH.t)autoSync();
+view();
+</script>
+</body>
+</html>
